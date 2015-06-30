@@ -5,7 +5,7 @@ classIntervals <- function(var, n, style="quantile", rtimes=3, ..., intervalClos
         if (is.factor(var)) stop("var is categorical")
         if (!is.numeric(var)) stop("var is not numeric") }
 
-setwd('/home/rebeldroid12/Desktop/swb/Viz')
+setwd('/home/rebeldroid12/Nepal_TeamViz')
 
 districts = readShapeSpatial('npl_polbnda_adm3_dis_25k_50k_sdn_wgs84/npl_polbnda_adm3_dis_25k_50k_sdn_wgs84.shp')
 
