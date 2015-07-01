@@ -7,7 +7,7 @@ library(rgdal)
 install.packages('RColorBrewer')
 library(RColorBrewer)
 
-install.packages('')
+#install.packages('')
 
 classIntervals <- function(var, n, style="quantile", rtimes=3, ..., intervalClosure=c("left", "right"), dataPrecision=NULL) {
         if (is.factor(var)) stop("var is categorical")
@@ -54,11 +54,6 @@ districts$wpredicted[is.na(districts$wpredicted)] <- 0
 districts$index_roof[is.na(districts$index_roof)] <- 0
 districts$index_wall[is.na(districts$index_wall)] <- 0
 
-#drop lame named columns
-drops <- c("score_dist","score_di_1","score_di_2","score_di_3","score_di_4","score_di_5","score_di_6"
-           ,"score_di_7","score_di_8","score_di_9","score_di10","score_di11","score_di12","score_di13")
-districts[, !(colnames(districts) %in% drops)]
-
 
 #create color breaks (9)
 colors <- brewer.pal(9, "YlOrRd")
@@ -72,6 +67,7 @@ png(filename="./merged_data/districts/obs_death.png")
 
 #plot prettiness!
 plot(districts, col=gray(districts$obs_death/max(districts$obs_death)))
+title(paste ("Nepal April 2015 Earthquake Observed deaths"))
 #plot(districts, col=colors[findInterval(districts$obs_death, brks,all.inside=TRUE)], axes=F)
 dev.off();
 
