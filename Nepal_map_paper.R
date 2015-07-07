@@ -57,7 +57,7 @@ district_shp$wpredicted[is.na(district_shp$wpredicted)] <- 0
 district_shp$index_roof[is.na(district_shp$index_roof)] <- 0
 district_shp$index_wall[is.na(district_shp$index_wall)] <- 0
 
-
+#http://www.datavis.ca/sasmac/brewerpal.html
 
 # equal-frequency class intervals
 plotvar <- district_shp@data$obs_death
@@ -79,6 +79,18 @@ plot(district_shp, col=colcode, add=T)
 title(paste("Nepal Total Population"))
 dev.off();
 
+
+#predicted death
+plotvar <- district_shp@data$pred_death
+nclr <- 8
+plotclr <- brewer.pal(nclr,"BuPu")
+class <- classIntervals(plotvar, nclr, style="quantile")
+colcode <- findColours(class, plotclr)
+png(filename="./pred_death_color.png")
+plot(district_shp)
+plot(district_shp, col=colcode, add=T)
+title(paste("Nepal Predictive Death"))
+dev.off();
 #district_shp@bbox
 #       min      max
 #x 80.05845 88.20153
