@@ -1,4 +1,4 @@
-setwd('/home/rebeldroid12/Nepal_TeamViz/merged_data')
+setwd('/home/rebeldroid12/Nepal_TeamViz/merged_data/districts')
 
 install.packages("maptools")
 install.packages("sp")
@@ -20,7 +20,8 @@ getinfo.shape("full_dist_merged_data.shp")
 #load merged data shapefiles
 
 #read in files (district)
-district_shp = readShapeLines('full_dist_merged_data.shp', proj4string=CRS("+proj=longlat"))
+#district_shp = readShapeLines('full_dist_merged_data.shp', proj4string=CRS("+proj=longlat"))
+district_shp = readShapeSpatial('full_dist_merged_data.shp')
 district_csv = read.csv('score_dist_final_20150616.csv', sep=",", header=TRUE)
 
 
@@ -41,6 +42,7 @@ district_shp$index_roof = as.numeric(as.character(district_shp$score_di12))
 district_shp$index_wall = as.numeric(as.character(district_shp$score_di13))
 
 #change NAs back to zero
+district_shp$total_pop[is.na(district_shp$total_pop)] <- 0
 district_shp$obs_death[is.na(district_shp$obs_death)] <- 0
 district_shp$obs_injured[is.na(district_shp$obs_injured)] <- 0
 district_shp$obs_mmi_max_dist[is.na(district_shp$obs_mmi_max_dist)] <- 0
@@ -59,10 +61,23 @@ district_shp$index_wall[is.na(district_shp$index_wall)] <- 0
 
 # equal-frequency class intervals
 plotvar <- district_shp@data$obs_death
-nclr <- 5
+nclr <- 8
 plotclr <- brewer.pal(nclr,"BuPu")
 class <- classIntervals(plotvar, nclr, style="quantile")
 colcode <- findColours(class, plotclr)
+
+
+#total pop
+plotvar <- district_shp@data$total_pop
+nclr <- 8
+plotclr <- brewer.pal(nclr,"BuPu")
+class <- classIntervals(plotvar, nclr, style="quantile")
+colcode <- findColours(class, plotclr)
+png(filename="./total_pop_color.png")
+plot(district_shp)
+plot(district_shp, col=colcode, add=T)
+title(paste("Nepal Total Population"))
+dev.off();
 
 #district_shp@bbox
 #       min      max
@@ -71,10 +86,11 @@ colcode <- findColours(class, plotclr)
 
 plot(district_shp)
 plot(district_shp, col=colcode, add=T)
-title(main="Observed Deaths", 
-      sub="Quantile (Equal-Frequency) Class Intervals")
-legend(-117, 44, legend=names(attr(colcode, "table")), 
-       fill=attr(colcode, "palette"), cex=0.6, bty="n")
+title(main="Observed Deaths in Nepal April 2015 Earthquake")
+
+#legend needs work
+#legend(-15, 44, legend=names(attr(colcode, "table")), 
+#       fill=attr(colcode, "palette"), cex=0.6, bty="n")
 
 
 #colors <- brewer.pal(9, "YlOrRd")
@@ -82,14 +98,13 @@ legend(-117, 44, legend=names(attr(colcode, "table")),
 #brks<-classIntervals(district_shp$obs_death, n=9, style="quantile")
 #brks<- brks$brks
 
-plot(district_shp, col=colors[findInterval(district_shp$obs_death, brks,all.inside=TRUE)], axes=F)
+#plot(district_shp, col=colors[findInterval(district_shp$obs_death, brks,all.inside=TRUE)], axes=F)
+
 
 
 
 #print map
-png(filename="./merged_data/districts/obs_death.png")
-
-
+png(filename="./obs_death_color.png")
 #plot prettiness!
 plot(districts, col=gray(district_shp$obs_death/max(district_shp$obs_death)))
 title(paste ("Nepal April 2015 Earthquake Observed deaths"))
