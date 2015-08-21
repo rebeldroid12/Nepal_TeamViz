@@ -62,39 +62,70 @@ district_shp$index_wall[is.na(district_shp$index_wall)] <- 0
 # equal-frequency class intervals
 plotvar <- district_shp@data$obs_death
 nclr <- 8
-plotclr <- brewer.pal(nclr,"BuPu")
+plotclr <- brewer.pal(nclr,"Greys")
 class <- classIntervals(plotvar, nclr, style="quantile")
 colcode <- findColours(class, plotclr)
 
 
+###########obs pop, obs mmi, obs death, obs injured #################
+#par(mfrow=c(2,2))
 #total pop
 plotvar <- district_shp@data$total_pop
 nclr <- 8
-plotclr <- brewer.pal(nclr,"BuPu")
-class <- classIntervals(plotvar, nclr, style="quantile")
+plotclr <- brewer.pal(nclr,"Greys")
+class <- classIntervals(plotvar, nclr, style="quantile")$brks
 colcode <- findColours(class, plotclr)
-png(filename="./total_pop_color.png")
+png(filename="./total_pop_grey.png")
 plot(district_shp)
 plot(district_shp, col=colcode, add=T)
 title(paste("Nepal Total Population"))
+legend("bottom", legend= leglabs(class), fill = plotclr, bty ="n", title.adj =0, xpd = TRUE, y.intersp =-0.8, 
+       xjust =1,adj =0, pt.cex = 1, cex = 0.7, x.intersp=3)
 dev.off();
 
 
-#predicted death
-plotvar <- district_shp@data$pred_death
+#mmi
+plotvar <- district_shp@data$obs_mmi_max_dist
 nclr <- 8
-plotclr <- brewer.pal(nclr,"BuPu")
-class <- classIntervals(plotvar, nclr, style="quantile")
+plotclr <- brewer.pal(nclr,"Greys")
+class <- classIntervals(plotvar, nclr, style="quantile")$brks
 colcode <- findColours(class, plotclr)
-png(filename="./pred_death_color.png")
+png(filename="./mmi_grey.png")
 plot(district_shp)
 plot(district_shp, col=colcode, add=T)
-title(paste("Nepal Predictive Death"))
+title(paste("Nepal MMI"))
+legend("bottom", legend= leglabs(class), fill = plotclr, bty ="n", title.adj =0, xpd = TRUE, y.intersp =-0.8, 
+       xjust =1,adj =0, pt.cex = 1, cex = 0.7, x.intersp=3)
 dev.off();
-#district_shp@bbox
-#       min      max
-#x 80.05845 88.20153
-#y 26.34797 30.44739
+
+#injured
+plotvar <- district_shp@data$obs_injured
+nclr <- 8
+plotclr <- brewer.pal(nclr,"Greys")
+class <- classIntervals(plotvar, nclr, style="quantile")$brks
+colcode <- findColours(class, plotclr)
+png(filename="./injured_grey.png")
+plot(district_shp)
+plot(district_shp, col=colcode, add=T)
+title(paste("Nepal Total Injured"))
+legend("bottom", legend= leglabs(class), fill = plotclr, bty ="n", title.adj =0, xpd = TRUE, y.intersp =-0.8, 
+       xjust =1,adj =0, pt.cex = 1, cex = 0.7, x.intersp=3)
+dev.off();
+
+#deaths
+plotvar <- district_shp@data$obs_deaths
+nclr <- 8
+plotclr <- brewer.pal(nclr,"Greys")
+class <- classIntervals(plotvar, nclr, style="quantile")$brks
+colcode <- findColours(class, plotclr)
+png(filename="./deaths_grey.png")
+plot(district_shp)
+plot(district_shp, col=colcode, add=T)
+title(paste("Nepal Total Deaths"))
+legend("bottom", legend= leglabs(class), fill = plotclr, bty ="n", title.adj =0, xpd = TRUE, y.intersp =-0.8, 
+       xjust =1,adj =0, pt.cex = 1, cex = 0.7, x.intersp=3)
+dev.off();
+
 
 plot(district_shp)
 plot(district_shp, col=colcode, add=T)
@@ -111,8 +142,6 @@ title(main="Observed Deaths in Nepal April 2015 Earthquake")
 #brks<- brks$brks
 
 #plot(district_shp, col=colors[findInterval(district_shp$obs_death, brks,all.inside=TRUE)], axes=F)
-
-
 
 
 #print map
